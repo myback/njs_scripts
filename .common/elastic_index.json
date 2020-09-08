@@ -1,0 +1,15 @@
+{
+    "settings": {
+        "number_of_shards": 1
+    },
+    "mappings":{
+        "properties": {
+            "addr": { "type": "text" },
+            "body": { "type": "object" },
+            "body_storage": { "type": "text" },
+            "headers": { "type": "object" },
+            "method": { "type": "text" },
+            "proto": { "type": "text" }
+        }
+    }
+}
