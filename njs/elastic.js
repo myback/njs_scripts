@@ -19,9 +19,9 @@ function push(r) {
         if (r.requestBody.length <= 4096) {
             _pl.body_storage = 'blob';
             _pl.body = {blob: r.requestBody.toString('base64url')};
-        // } else {
-            // _pl.body_storage = 's3';
-            // _pl.body = {url: `https://elsatic-1.s3-storage/${doc_id}`}
+        } else {
+            _pl.body_storage = 'url';
+            _pl.body = {url: `https://elsatic-1.s3-storage/${doc_id}_${r.remoteAddress.replace(/\./g, '_')}`}
 
             // r.subrequest(`/s3-upload/${doc_id}`, {method: 'PUT'})
         }
