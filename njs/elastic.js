@@ -1,11 +1,13 @@
 function push(r) {
     var _pl = {
-        'addr': r.remoteAddress,
-        'body': {},
-        'body_storage': 'json',
-        'headers': r.headersIn,
-        'method': r.method,
-        'proto': r.httpVersion,
+        addr: r.remoteAddress,
+        body: {},
+        body_storage: 'json',
+        headers: r.headersIn,
+        request_args: r.args,
+        request_method: r.method,
+        proto: r.httpVersion,
+        uri: r.uri,
     };
 
     var doc_id = Date.now();
