@@ -7,7 +7,7 @@ function push(r) {
         request_args: r.args,
         request_method: r.method,
         proto: r.httpVersion,
-        uri: r.uri,
+        uri: r.variables.request_uri,
     };
 
     var doc_id = require('crypto')
@@ -33,7 +33,6 @@ function push(r) {
         }
     }
 
-    r.headersOut['Content-Type'] = "application/json; charset=utf-8";
     r.subrequest(`/elastic/mirror/_doc/${doc_id}`, {body: JSON.stringify(_pl), method: 'PUT'});
 }
 
