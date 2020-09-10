@@ -1,6 +1,8 @@
 function echo(r) {
     var j = {
         headers: r.headersIn,
+        request_method: r.method,
+        vars: r.variables.request_uri,
     };
 
     try {

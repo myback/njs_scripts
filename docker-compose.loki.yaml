@@ -1,0 +1,29 @@
+version: "3"
+services:
+  nginx:
+    image: nginx:1.18-alpine
+    volumes:
+      - ./njs:/etc/nginx/njs:ro
+      - ./nginx/loki.nginx.conf:/etc/nginx/nginx.conf:ro
+    ports:
+      - 8080:8080
+    networks:
+      - loki
+
+  loki:
+    image: grafana/loki:1.6.0
+    ports:
+      - "3100:3100"
+    command: -config.file=/etc/loki/local-config.yaml -log.level=debug
+    networks:
+      - loki
+
+  grafana:
+    image: grafana/grafana:latest
+    ports:
+      - "3000:3000"
+    networks:
+      - loki
+
+networks:
+  loki:
