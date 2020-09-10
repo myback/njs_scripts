@@ -10,7 +10,11 @@ function push(r) {
         uri: r.uri,
     };
 
-    var doc_id = Date.now();
+    var doc_id = require('crypto')
+                    .createHash('sha1')
+                    .update(`${r.remoteAddress}\n${r.uri}\n${r.args}`)
+                    .update(`${Date.now()}`)
+                    .digest("hex");
 
     try {
         if (r.requestBody) {
@@ -23,7 +27,7 @@ function push(r) {
             _pl.body = {blob: r.requestBody.toString('base64url')};
         } else {
             _pl.body_storage = 'url';
-            _pl.body = {url: `https://elsatic-1.s3-storage/${doc_id}_${r.remoteAddress.replace(/\./g, '_')}`}
+            _pl.body = {url: `https://elsatic-1.s3-storage/${doc_id}`};
 
             // r.subrequest(`/s3-upload/${doc_id}`, {method: 'PUT'})
         }
