@@ -9,6 +9,7 @@
             "body_storage": { "type": "text" },
             "headers": { "type": "object" },
             "request_args": { "type": "object" },
+            "request_id": { "type": "text" },
             "request_method": { "type": "text" },
             "proto": { "type": "text" },
             "uri": { "type": "text" }

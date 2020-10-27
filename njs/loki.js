@@ -1,10 +1,12 @@
 function push(r) {
+    var req_id = r.variables.request_id;
     var _pl = {
         addr: r.remoteAddress,
         body: {},
         body_storage: 'json',
         headers: r.headersIn,
         request_args: r.args,
+        request_id: req_id,
         request_method: r.method,
         proto: r.httpVersion,
         uri: r.variables.request_uri,
@@ -23,17 +25,15 @@ function push(r) {
             _pl.body = {blob: r.requestBody.toString('base64url')};
         } else {
             _pl.body_storage = 'url';
+            _pl.body = {url: `https://loki-1.s3-storage/${req_id}`}
 
-            var filename = `${unix_date}_${r.remoteAddress.replace(/\./g, '_')}`;
-            _pl.body = {url: `https://loki-1.s3-storage/${filename}`}
-
-            // r.subrequest(`/s3-upload/${filename}`, {method: 'PUT'})
+            // r.subrequest(`/s3-upload/${req_id}`, {method: 'PUT'})
         }
     }
 
     var loki_data = {
         streams: [{
-            stream: {nginx: "test"},
+            stream: {nginx: "test", request_id: req_id},
             values: [[`${unix_date * 10**6}`, JSON.stringify(_pl)]]
         }]
     }

@@ -1,20 +1,16 @@
 function push(r) {
+    var req_id = r.variables.request_id;
     var _pl = {
         addr: r.remoteAddress,
         body: {},
         body_storage: 'json',
         headers: r.headersIn,
         request_args: r.args,
+        request_id: req_id,
         request_method: r.method,
         proto: r.httpVersion,
         uri: r.variables.request_uri,
     };
-
-    var doc_id = require('crypto')
-                    .createHash('sha1')
-                    .update(`${r.remoteAddress}\n${r.uri}\n${r.args}`)
-                    .update(`${Date.now()}`)
-                    .digest("hex");
 
     try {
         if (r.requestBody) {
@@ -27,13 +23,13 @@ function push(r) {
             _pl.body = {blob: r.requestBody.toString('base64url')};
         } else {
             _pl.body_storage = 'url';
-            _pl.body = {url: `https://elsatic-1.s3-storage/${doc_id}`};
+            _pl.body = {url: `https://elsatic-1.s3-storage/${req_id}`};
 
-            // r.subrequest(`/s3-upload/${doc_id}`, {method: 'PUT'})
+            // r.subrequest(`/s3-upload/${req_id}`, {method: 'PUT'})
         }
     }
 
-    r.subrequest(`/elastic/mirror/_doc/${doc_id}`, {body: JSON.stringify(_pl), method: 'PUT'});
+    r.subrequest(`/elastic/mirror/_doc/${req_id}`, {body: JSON.stringify(_pl), method: 'PUT'});
 }
 
 export default {push}
